@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Google Health / Digitalized Theme -->
+    <color name="colorPrimary">#1A73E8</color> <!-- Google Blue -->
+    <color name="colorPrimaryDark">#174EA6</color>
+    <color name="colorAccent">#34A853</color> <!-- Google Green -->
+
+    <color name="backgroundColor">#F8F9FA</color>
+    <color name="cardBackground">#FFFFFF</color>
+
+    <color name="textPrimary">#202124</color>
+    <color name="textSecondary">#5F6368</color>
+
+    <!-- Metric Colors -->
+    <color name="metricSteps">#FBBC04</color> <!-- Yellow -->
+    <color name="metricHeart">#EA4335</color> <!-- Red -->
+    <color name="metricSleep">#A142F4</color> <!-- Purple -->
+    <color name="metricWater">#4285F4</color> <!-- Blue -->
+
+    <color name="statusWaiting">#FBBC04</color>
+    <color name="statusCritical">#D93025</color>
+
+    <!-- 2026 login experience -->
+    <color name="loginInk">#101828</color>
+    <color name="loginMuted">#667085</color>
+    <color name="loginSurface">#F9FBFD</color>
+    <color name="loginSurfaceStrong">#FFFFFF</color>
+    <color name="loginLine">#D7E3EA</color>
+    <color name="loginBlue">#176BFF</color>
+    <color name="loginBlueDark">#0D3B8E</color>
+    <color name="loginAqua">#00B8A9</color>
+    <color name="loginLime">#66D575</color>
+    <color name="loginWarning">#FFB020</color>
+    <color name="loginSoftBlue">#EAF3FF</color>
+    <color name="loginSoftGreen">#EAFBF3</color>
+
+    <!-- 2026 dashboard experience -->
+    <color name="dashBackground">#F4F7FA</color>
+    <color name="dashInk">#121A26</color>
+    <color name="dashMuted">#657386</color>
+    <color name="dashSurface">#FFFFFF</color>
+    <color name="dashLine">#DCE5EC</color>
+    <color name="dashNavy">#13294B</color>
+    <color name="dashBlue">#1E6BFF</color>
+    <color name="dashTeal">#12A594</color>
+    <color name="dashGreen">#16A163</color>
+    <color name="dashAmber">#D97706</color>
+    <color name="dashRed">#D92D20</color>
+    <color name="dashSoftBlue">#EAF2FF</color>
+    <color name="dashSoftTeal">#E8F8F5</color>
+    <color name="dashSoftAmber">#FFF4DE</color>
+    <color name="dashSoftRed">#FEECEC</color>
+</resources>
