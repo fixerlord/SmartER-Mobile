@@ -4,10 +4,40 @@
   overflow-y: auto;
 }
 
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .queue-title {
   color: #1a3a52;
-  margin-bottom: 1.5rem;
   font-size: 1.8rem;
+  margin: 0;
+}
+
+.queue-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1rem;
+  color: #424242;
+}
+
+.total-patients {
+  font-weight: bold;
+  color: #1a3a52;
+}
+
+.summary-divider {
+  color: #bdbdbd;
+}
+
+.level-summary {
+  font-weight: 500;
 }
 
 .priority-section {
@@ -57,9 +87,11 @@
 }
 
 .patients-container {
-  background-color: #f5f5f5;
   padding: 1rem;
   min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
 }
 
 .no-patients {
@@ -69,14 +101,26 @@
   font-style: italic;
 }
 
+/* Web view */
+@media (min-width: 901px) {
+  .triage-queue {
+    width: 70%;
+  }
+}
+
 /* Tablet */
 @media (max-width: 900px) {
   .triage-queue {
     padding: 1rem;
+    width: 100%;
   }
 
   .queue-title {
     font-size: 1.5rem;
+  }
+
+  .queue-summary {
+    font-size: 0.9rem;
   }
 
   .priority-header {
@@ -97,11 +141,21 @@
 @media (max-width: 600px) {
   .triage-queue {
     padding: 0.8rem;
+    width: 100%;
+  }
+
+  .queue-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .queue-title {
     font-size: 1.3rem;
-    margin-bottom: 1rem;
+  }
+
+  .queue-summary {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
   }
 
   .priority-header {

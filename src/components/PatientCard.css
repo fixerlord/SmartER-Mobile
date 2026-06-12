@@ -2,10 +2,11 @@
   background-color: white;
   border-radius: 6px;
   padding: 1rem;
-  margin-bottom: 0.8rem;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   border-left: 4px solid #2196f3;
+  flex: 0 0 calc(25% - 0.6rem);
+  box-sizing: border-box;
 }
 
 .patient-card:hover {
@@ -34,6 +35,9 @@
   color: #ff9800;
   font-size: 0.9rem;
   font-weight: 500;
+  background-color: #fff3e0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
 }
 
 .patient-diagnosis {
@@ -45,6 +49,7 @@
 @media (max-width: 900px) {
   .patient-card {
     padding: 0.9rem;
+    flex: 0 0 calc(33.333% - 0.6rem);
   }
 
   .patient-id {
@@ -64,7 +69,7 @@
 @media (max-width: 600px) {
   .patient-card {
     padding: 0.8rem;
-    margin-bottom: 0.6rem;
+    flex: 0 0 calc(50% - 0.4rem);
   }
 
   .patient-card-header {

@@ -66,10 +66,55 @@
   background-color: #f5f5f5;
 }
 
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .review-title {
   color: #1a3a52;
-  margin-bottom: 1.5rem;
   font-size: 1.8rem;
+  margin: 0;
+}
+
+.review-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.action-button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.message-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.message-button:hover {
+  background-color: #1976d2;
+}
+
+.call-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.call-button:hover {
+  background-color: #388e3c;
 }
 
 .section-title {
@@ -103,7 +148,6 @@
 }
 
 .priority-badge {
-  background-color: #2196f3;
   color: white;
   padding: 0.3rem 0.8rem;
   border-radius: 4px;
@@ -203,8 +247,22 @@
     padding: 1.5rem;
   }
 
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .review-title {
     font-size: 1.5rem;
+  }
+
+  .review-actions {
+    width: 100%;
+  }
+
+  .action-button {
+    flex: 1;
+    justify-content: center;
   }
 
   .section-title {
@@ -247,9 +305,24 @@
     padding: 1rem;
   }
 
+  .review-header {
+    margin-bottom: 1rem;
+  }
+
   .review-title {
     font-size: 1.3rem;
-    margin-bottom: 1rem;
+  }
+
+  .review-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-button {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
 
   .section-title {

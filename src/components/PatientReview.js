@@ -9,6 +9,14 @@ const PRIORITY_NAMES = {
   5: 'Level 5 - Non-Urgent'
 };
 
+const PRIORITY_COLORS = {
+  1: '#000000',
+  2: '#d32f2f',
+  3: '#f57c00',
+  4: '#fbc02d',
+  5: '#7cb342'
+};
+
 function PatientReview({ patient, onClose }) {
   const formatETA = (eta) => {
     const date = new Date(eta);
@@ -32,7 +40,17 @@ function PatientReview({ patient, onClose }) {
         
         <div className="review-content">
           <div className="review-left">
-            <h2 className="review-title">Patient Review</h2>
+            <div className="review-header">
+              <h2 className="review-title">Patient Review</h2>
+              <div className="review-actions">
+                <button className="action-button message-button">
+                  📱 Message Patient
+                </button>
+                <button className="action-button call-button">
+                  📞 Call Patient
+                </button>
+              </div>
+            </div>
             
             <div className="review-section">
               <div className="info-row">
@@ -41,7 +59,10 @@ function PatientReview({ patient, onClose }) {
               </div>
               <div className="info-row">
                 <span className="info-label">Triage Priority:</span>
-                <span className="info-value priority-badge">
+                <span 
+                  className="info-value priority-badge"
+                  style={{ backgroundColor: PRIORITY_COLORS[patient.priority] }}
+                >
                   {PRIORITY_NAMES[patient.priority]}
                 </span>
               </div>

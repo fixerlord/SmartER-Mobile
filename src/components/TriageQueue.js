@@ -50,9 +50,29 @@ function TriageQueue({ patients, onPatientClick, onPriorityChange }) {
     setDraggedPatient(null);
   };
 
+  const getTotalPatients = () => patients.length;
+
+  const getSummaryByLevel = () => {
+    return PRIORITY_LEVELS.map(({ level }) => ({
+      level,
+      count: getPatientsByPriority(level).length
+    }));
+  };
+
   return (
     <div className="triage-queue">
-      <h2 className="queue-title">Triage Queue</h2>
+      <div className="queue-header">
+        <h2 className="queue-title">Triage Queue</h2>
+        <div className="queue-summary">
+          <span className="total-patients">Total: {getTotalPatients()}</span>
+          <span className="summary-divider">|</span>
+          {getSummaryByLevel().map(({ level, count }) => (
+            <span key={level} className="level-summary">
+              L{level}: {count}
+            </span>
+          ))}
+        </div>
+      </div>
       {PRIORITY_LEVELS.map(({ level, name, color }) => {
         const levelPatients = getPatientsByPriority(level);
         const isExpanded = expandedLevels[level];
@@ -79,7 +99,10 @@ function TriageQueue({ patients, onPatientClick, onPriorityChange }) {
               </span>
             </div>
             {isExpanded && (
-              <div className="patients-container">
+              <div 
+                className="patients-container"
+                style={{ backgroundColor: `${color}55` }}
+              >
                 {levelPatients.length === 0 ? (
                   <div className="no-patients">No patients in this category</div>
                 ) : (

@@ -6,6 +6,17 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Web view */
+@media (min-width: 901px) {
+  .hospital-occupancy {
+    width: 30%;
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+    margin-top: 1.5rem;
+  }
+}
+
 .occupancy-title {
   color: #1a3a52;
   margin-bottom: 1.5rem;
@@ -82,6 +93,7 @@
   .hospital-occupancy {
     padding: 1.2rem;
     margin: 1.2rem;
+    order: -1;
   }
 
   .occupancy-title {
@@ -94,6 +106,17 @@
 
   .occupancy-card {
     padding: 1rem;
+    display: inline-block;
+    width: calc(50% - 0.75rem);
+    vertical-align: top;
+  }
+
+  .occupancy-card:first-of-type {
+    margin-right: 1.5rem;
+  }
+
+  .occupancy-card:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -102,6 +125,7 @@
   .hospital-occupancy {
     padding: 1rem;
     margin: 1rem;
+    order: -1;
   }
 
   .occupancy-title {
@@ -116,6 +140,17 @@
   .occupancy-card {
     padding: 0.8rem;
     margin-bottom: 1rem;
+    display: inline-block;
+    width: calc(50% - 0.5rem);
+    vertical-align: top;
+  }
+
+  .occupancy-card:first-of-type {
+    margin-right: 1rem;
+  }
+
+  .occupancy-card:last-child {
+    margin-bottom: 0;
   }
 
   .stat-row {
@@ -123,10 +158,6 @@
   }
 
   .progress-bar {
-    height: 25px;
-  }
-
-  .progress-text {
-    font-size: 0.8rem;
+    display: none;
   }
 }
