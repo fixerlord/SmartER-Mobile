@@ -1,0 +1,87 @@
+.patient-card {
+  background-color: white;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid #2196f3;
+}
+
+.patient-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.patient-card:active {
+  cursor: grabbing;
+}
+
+.patient-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.patient-id {
+  font-weight: bold;
+  color: #1a3a52;
+  font-size: 1rem;
+}
+
+.patient-eta {
+  color: #ff9800;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.patient-diagnosis {
+  color: #424242;
+  font-size: 0.95rem;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .patient-card {
+    padding: 0.9rem;
+  }
+
+  .patient-id {
+    font-size: 0.95rem;
+  }
+
+  .patient-eta {
+    font-size: 0.85rem;
+  }
+
+  .patient-diagnosis {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .patient-card {
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .patient-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .patient-id {
+    font-size: 0.9rem;
+  }
+
+  .patient-eta {
+    font-size: 0.8rem;
+  }
+
+  .patient-diagnosis {
+    font-size: 0.85rem;
+  }
+}
