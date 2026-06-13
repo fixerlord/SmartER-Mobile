@@ -1,0 +1,185 @@
+.triage-queue {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.queue-title {
+  color: #1a3a52;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.queue-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1rem;
+  color: #424242;
+}
+
+.total-patients {
+  font-weight: bold;
+  color: #1a3a52;
+}
+
+.summary-divider {
+  color: #bdbdbd;
+}
+
+.level-summary {
+  font-weight: 500;
+}
+
+.priority-section {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.priority-header {
+  padding: 1rem 1.5rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: opacity 0.3s;
+}
+
+.priority-header:hover {
+  opacity: 0.9;
+}
+
+.priority-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.priority-level {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.priority-name {
+  font-size: 1.1rem;
+}
+
+.patient-count {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.expand-icon {
+  font-size: 1rem;
+}
+
+.patients-container {
+  padding: 1rem;
+  min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.no-patients {
+  text-align: center;
+  color: #757575;
+  padding: 1rem;
+  font-style: italic;
+}
+
+/* Web view */
+@media (min-width: 901px) {
+  .triage-queue {
+    width: 70%;
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .triage-queue {
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .queue-title {
+    font-size: 1.5rem;
+  }
+
+  .queue-summary {
+    font-size: 0.9rem;
+  }
+
+  .priority-header {
+    padding: 0.8rem 1.2rem;
+  }
+
+  .priority-level,
+  .priority-name {
+    font-size: 1rem;
+  }
+
+  .patient-count {
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .triage-queue {
+    padding: 0.8rem;
+    width: 100%;
+  }
+
+  .queue-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .queue-title {
+    font-size: 1.3rem;
+  }
+
+  .queue-summary {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .priority-header {
+    padding: 0.7rem 1rem;
+  }
+
+  .priority-info {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .priority-level {
+    font-size: 0.9rem;
+  }
+
+  .priority-name {
+    font-size: 0.9rem;
+  }
+
+  .patient-count {
+    font-size: 0.8rem;
+  }
+
+  .patients-container {
+    padding: 0.8rem;
+  }
+}

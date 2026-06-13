@@ -1,0 +1,103 @@
+.app-bar {
+  background-color: #1a3a52;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-bar-left {
+  display: flex;
+  align-items: center;
+}
+
+.app-name {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ff9800;
+}
+
+.app-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nurse-id {
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+
+.logout-button {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #f57c00;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .app-bar {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .app-name {
+    font-size: 1.5rem;
+  }
+
+  .nurse-id {
+    font-size: 0.9rem;
+  }
+
+  .logout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .app-bar {
+    padding: 0.6rem 1rem;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .app-bar-left,
+  .app-bar-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .app-name {
+    font-size: 1.3rem;
+  }
+
+  .app-bar-right {
+    gap: 1rem;
+  }
+
+  .nurse-id {
+    font-size: 0.85rem;
+  }
+
+  .logout-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
