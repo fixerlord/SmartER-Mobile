@@ -15,11 +15,6 @@ function HospitalOccupancy({ occupancy }) {
     occupancy.erBeds.total
   );
 
-  const inpatientPercentage = calculatePercentage(
-    occupancy.inpatientRooms.occupied,
-    occupancy.inpatientRooms.total
-  );
-
   const getStatusColor = (percentage) => {
     if (percentage >= 90) return '#d32f2f';
     if (percentage >= 75) return '#f57c00';
