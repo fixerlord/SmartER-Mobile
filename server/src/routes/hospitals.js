@@ -6,5 +6,6 @@ const queueController = require('../controllers/queueController');
 router.get('/', hospitalController.getAllHospitals);
 router.get('/:id', hospitalController.getHospitalById);
 router.get('/:id/queue', queueController.getHospitalQueue);
+router.get('/:id/dashboard', hospitalController.getDashboard);
 
 module.exports = router;

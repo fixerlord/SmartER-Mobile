@@ -41,6 +41,38 @@ const hospitalController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  /**
+   * GET /api/hospitals/:id/dashboard
+   * Get complete hospital dashboard data
+   */
+  async getDashboard(req, res, next) {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid hospital ID'
+        });
+      }
+      
+      const dashboard = await hospitalService.getDashboard(parseInt(id));
+      
+      res.status(200).json({
+        success: true,
+        data: dashboard
+      });
+    } catch (error) {
+      if (error.message === 'Hospital not found') {
+        return res.status(404).json({
+          success: false,
+          error: 'Hospital not found'
+        });
+      }
+      next(error);
+    }
   }
 };
 

@@ -435,14 +435,314 @@ curl http://localhost:5000/api/arrivals/1
 
 ---
 
+## Patient Details
+
+### GET /api/arrivals/:id/details
+Get complete patient details including triage summary and chat log.
+
+**Parameters:**
+- `id` (path parameter) - Arrival ID (integer)
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "P001",
+    "priority": 2,
+    "suspectedDiagnosis": "Cardiac Arrest",
+    "eta": "2026-06-12T14:30:00.000Z",
+    "triageSummary": {
+      "symptoms": "Severe chest pain, difficulty breathing",
+      "chronology": "Started 15 minutes ago suddenly",
+      "quality": "Crushing pain, 10/10 severity",
+      "quantity": "Continuous, radiating to left arm",
+      "positiveModifiers": "None",
+      "negativeModifiers": "Pain worsens with any movement",
+      "associatedSymptoms": "Nausea, dizziness, cold sweats",
+      "previousHistory": "No previous cardiac events",
+      "familyHistory": "Father had heart attack at age 55",
+      "currentMedication": "None",
+      "otherNotes": "Patient is extremely anxious and pale"
+    },
+    "chatLog": [
+      {
+        "sender": "bot",
+        "message": "Hello, I'm the SmartER triage assistant.",
+        "timestamp": "14:15:00"
+      },
+      {
+        "sender": "patient",
+        "message": "I have terrible chest pain",
+        "timestamp": "14:15:30"
+      }
+    ]
+  }
+}
+```
+
+**Response (404 Not Found):**
+```json
+{
+  "success": false,
+  "error": "Arrival not found"
+}
+```
+
+---
+
+## Hospital Dashboard
+
+### GET /api/hospitals/:id/dashboard
+Get complete hospital dashboard data including occupancy and patient queues.
+
+**Parameters:**
+- `id` (path parameter) - Hospital ID (integer)
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "hospital": {
+      "id": 1,
+      "name": "Surrey Memorial Hospital",
+      "address": "13750 96 Ave, Surrey, BC V3V 1Z2",
+      "phone": "(604) 581-2211"
+    },
+    "occupancy": {
+      "erBeds": {
+        "total": 20,
+        "occupied": 14,
+        "available": 6
+      },
+      "inpatientRooms": {
+        "total": 150,
+        "occupied": 132,
+        "available": 18
+      }
+    },
+    "patients": [
+      {
+        "id": "P001",
+        "priority": 1,
+        "suspectedDiagnosis": "Cardiac Arrest",
+        "eta": "2026-06-12T14:30:00.000Z"
+      }
+    ],
+    "queues": {
+      "priority1": [],
+      "priority2": [],
+      "priority3": [],
+      "priority4": [],
+      "priority5": []
+    }
+  }
+}
+```
+
+**Response (404 Not Found):**
+```json
+{
+  "success": false,
+  "error": "Hospital not found"
+}
+```
+
+**Usage Notes:**
+- This endpoint provides all data needed to render the nurse dashboard
+- `patients` array contains all active patients
+- `queues` object groups patients by priority level for easy rendering
+- Occupancy data shows current ER and inpatient bed availability
+
+---
+
+## Priority Management
+
+### PUT /api/arrivals/:id/priority
+Update patient priority (drag-and-drop support).
+
+**Parameters:**
+- `id` (path parameter) - Arrival ID (integer)
+
+**Request Body:**
+```json
+{
+  "priority": 3
+}
+```
+
+**Validation:**
+- `priority` (required): Integer, must be between 1-5
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "message": "Priority updated successfully",
+  "data": {
+    "hospital": { ... },
+    "occupancy": { ... },
+    "patients": [ ... ],
+    "queues": { ... }
+  }
+}
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "success": false,
+  "error": "Priority is required and must be an integer between 1 and 5"
+}
+```
+
+**Response (404 Not Found):**
+```json
+{
+  "success": false,
+  "error": "Arrival not found"
+}
+```
+
+**Workflow:**
+1. Updates arrival priority in database
+2. Recalculates queue wait times for the hospital
+3. Returns complete updated dashboard state
+4. React dashboard can immediately re-render with new data
+
+---
+
+## Database Schema Updates
+
+### New Tables
+
+#### triage_summary
+Stores detailed triage questionnaire responses.
+
+**Columns:**
+- `id` - Serial primary key
+- `arrival_id` - Foreign key to arrivals (unique)
+- `symptoms` - Text
+- `chronology` - Text
+- `quality` - Text
+- `quantity` - Text
+- `positive_modifiers` - Text
+- `negative_modifiers` - Text
+- `associated_symptoms` - Text
+- `previous_history` - Text
+- `family_history` - Text
+- `current_medication` - Text
+- `other_notes` - Text
+- `created_at` - Timestamp
+- `updated_at` - Timestamp
+
+#### chat_messages
+Stores triage chat conversation history.
+
+**Columns:**
+- `id` - Serial primary key
+- `arrival_id` - Foreign key to arrivals
+- `sender` - VARCHAR(20), 'bot' or 'patient'
+- `message` - Text
+- `timestamp` - VARCHAR(20), time string like "14:15:00"
+- `created_at` - Timestamp
+
+#### hospital_occupancy
+Tracks hospital bed capacity.
+
+**Columns:**
+- `id` - Serial primary key
+- `hospital_id` - Foreign key to hospitals (unique)
+- `current_er_capacity` - Integer
+- `max_er_capacity` - Integer
+- `current_inpatient_capacity` - Integer
+- `max_inpatient_capacity` - Integer
+- `updated_at` - Timestamp
+
+### Updated Tables
+
+#### arrivals
+Added columns:
+- `suspected_diagnosis` - VARCHAR(255)
+- `eta` - Timestamp (estimated time of arrival)
+
+---
+
+## Migration Instructions
+
+To apply database changes to existing installation:
+
+```bash
+psql -U postgres -d smarter -f server/src/db/migrations/001_add_triage_and_chat.sql
+```
+
+Or for fresh installation:
+
+```bash
+psql -U postgres -d smarter -f server/src/db/schema.sql
+psql -U postgres -d smarter -f server/src/db/seed.sql
+```
+
+---
+
+## React Integration Notes
+
+### No React Changes Required
+
+The backend APIs are designed to match the existing React data structure from `patientsData.json`.
+
+### API Usage in React
+
+Replace the placeholder JSON with API calls:
+
+**Current (placeholder):**
+```javascript
+import patientsData from './data/patientsData.json';
+setPatients(patientsData.patients);
+setHospitalOccupancy(patientsData.hospitalOccupancy);
+```
+
+**Updated (API):**
+```javascript
+// Fetch dashboard data
+const response = await fetch('http://localhost:5000/api/hospitals/1/dashboard');
+const result = await response.json();
+
+setPatients(result.data.patients);
+setHospitalOccupancy(result.data.occupancy);
+```
+
+**Fetch patient details:**
+```javascript
+const response = await fetch(`http://localhost:5000/api/arrivals/${arrivalId}/details`);
+const result = await response.json();
+setSelectedPatient(result.data);
+```
+
+**Update priority (drag-and-drop):**
+```javascript
+const response = await fetch(`http://localhost:5000/api/arrivals/${patientId}/priority`, {
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ priority: newPriority })
+});
+const result = await response.json();
+
+// Update entire dashboard with new data
+setPatients(result.data.patients);
+setHospitalOccupancy(result.data.occupancy);
+```
+
+---
+
 ## Future Endpoints (Not Yet Implemented)
 
 The following endpoints return `501 Not Implemented`:
 - `/api/patients/*`
-- `/api/triage/*`
-- `/api/queue/*`
-- `/api/chat/*`
-- `/api/occupancy/*`
+- `/api/triage/*` (except priority update)
+- `/api/chat/*` (except via arrival details)
+- `/api/occupancy/*` (except via dashboard)
 - `/api/records/*`
 
 These will be implemented in future iterations.

@@ -123,6 +123,84 @@ const arrivalController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  /**
+   * GET /api/arrivals/:id/details
+   * Get arrival details with triage summary and chat log
+   */
+  async getArrivalDetails(req, res, next) {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid arrival ID'
+        });
+      }
+      
+      const details = await arrivalService.getArrivalDetails(parseInt(id));
+      
+      if (!details) {
+        return res.status(404).json({
+          success: false,
+          error: 'Arrival not found'
+        });
+      }
+      
+      res.status(200).json({
+        success: true,
+        data: details
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * PUT /api/arrivals/:id/priority
+   * Update arrival priority
+   */
+  async updatePriority(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { priority } = req.body;
+      
+      if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid arrival ID'
+        });
+      }
+      
+      if (!priority || !Number.isInteger(priority) || priority < 1 || priority > 5) {
+        return res.status(400).json({
+          success: false,
+          error: 'Priority is required and must be an integer between 1 and 5'
+        });
+      }
+      
+      const result = await arrivalService.updatePriority(parseInt(id), priority);
+      
+      // Get updated dashboard data
+      const hospitalService = require('../services/hospitalService');
+      const dashboard = await hospitalService.getDashboard(result.hospitalId);
+      
+      res.status(200).json({
+        success: true,
+        message: 'Priority updated successfully',
+        data: dashboard
+      });
+    } catch (error) {
+      if (error.message === 'Arrival not found') {
+        return res.status(404).json({
+          success: false,
+          error: 'Arrival not found'
+        });
+      }
+      next(error);
+    }
   }
 };
 
