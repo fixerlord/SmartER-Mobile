@@ -29,6 +29,19 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Database connection test endpoint
+app.get('/api/test-db', async (req, res, next) => {
+  try {
+    const db = require('./db');
+    await db.query('SELECT 1');
+    res.json({
+      connected: true
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // API routes
 app.use('/api', routes);
 
