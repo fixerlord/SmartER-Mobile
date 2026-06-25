@@ -46,7 +46,13 @@ const arrivalService = {
       
       await client.query('COMMIT');
       
-      return result.rows[0];
+      const arrival = result.rows[0];
+      
+      // Recalculate queue for this hospital
+      const queueService = require('./queueService');
+      await queueService.recalculateQueue(hospitalId);
+      
+      return arrival;
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;

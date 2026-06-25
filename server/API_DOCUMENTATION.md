@@ -240,6 +240,64 @@ Get a specific arrival record by ID.
 
 ---
 
+## Queue Management
+
+### GET /api/hospitals/:id/queue
+Get the current queue for a specific hospital with calculated wait times.
+
+**Parameters:**
+- `id` (path parameter) - Hospital ID (integer)
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "arrivalId": 15,
+      "patientName": "John Doe",
+      "priority": 2,
+      "diagnosis": "Appendicitis",
+      "estimatedWait": 10
+    },
+    {
+      "arrivalId": 18,
+      "patientName": "Jane Smith",
+      "priority": 3,
+      "diagnosis": "Broken arm",
+      "estimatedWait": 40
+    }
+  ]
+}
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "success": false,
+  "error": "Invalid hospital ID"
+}
+```
+
+**Response (404 Not Found):**
+```json
+{
+  "success": false,
+  "error": "Hospital not found"
+}
+```
+
+**Queue Calculation Logic:**
+- Fetches all active arrivals (status: 'waiting' or 'in_treatment') for the hospital
+- Sorts by priority (1-5, ascending) then by arrival time
+- Calculates estimated wait time based on:
+  - Base wait time for priority level (1=0min, 2=10min, 3=30min, 4=60min, 5=90min)
+  - Additional wait from patients ahead in queue
+- Updates `estimated_wait` field in database
+- Returns queue in priority order
+
+---
+
 ## Error Responses
 
 All endpoints may return the following error responses:
@@ -332,6 +390,11 @@ curl http://localhost:5000/api/test-db
 ### Get All Hospitals
 ```bash
 curl http://localhost:5000/api/hospitals
+```
+
+### Get Hospital Queue
+```bash
+curl http://localhost:5000/api/hospitals/1/queue
 ```
 
 ### Create Arrival

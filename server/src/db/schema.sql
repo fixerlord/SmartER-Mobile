@@ -38,6 +38,7 @@ CREATE TABLE arrivals (
     priority INTEGER NOT NULL CHECK (priority >= 1 AND priority <= 5),
     diagnosis VARCHAR(500),
     status VARCHAR(50) DEFAULT 'waiting',
+    estimated_wait INTEGER DEFAULT 0,
     arrived_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
