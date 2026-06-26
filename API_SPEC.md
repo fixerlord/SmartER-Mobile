@@ -1,10 +1,3 @@
-Here is your **updated API_SPEC file**, expanded to include all current endpoints from your system (patient + nurse + dashboard + triage + queue logic), while keeping the same clean, brief format.
-
-You can copy this directly as `API_SPEC.md`.
-
----
-
-````md id="api_spec_v2"
 # API
 
 This document describes all backend API endpoints for the SmartER prototype system.
@@ -210,15 +203,3 @@ Includes:
 * No frontend logic should calculate medical or queue data
 
 ````
-
----
-
-If you want, I can next :contentReference[oaicite:0]{index=0} so they don’t even deal with endpoints directly — just:
-
-```js
-getHospitals()
-createArrival()
-getArrivalStatus()
-````
-
-which is usually the cleanest way to hand off to another developer.
