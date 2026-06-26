@@ -7,57 +7,99 @@ const arrivalController = {
    */
   async createArrival(req, res, next) {
     try {
-      const { patientName, hospitalId, priority, diagnosis } = req.body;
+      const { hospitalId, patientName, chatLog, triageSummary } = req.body;
       
-      // Validation
+      // Validate hospitalId
+      if (!hospitalId || !Number.isInteger(hospitalId)) {
+        return res.status(400).json({
+          success: false,
+          error: 'hospitalId is required and must be an integer'
+        });
+      }
+      
+      // Validate patientName
       if (!patientName || typeof patientName !== 'string' || patientName.trim().length === 0) {
         return res.status(400).json({
           success: false,
-          error: 'Patient name is required and must be a non-empty string'
+          error: 'patientName is required and must be a non-empty string'
         });
       }
       
       if (patientName.length > 255) {
         return res.status(400).json({
           success: false,
-          error: 'Patient name must not exceed 255 characters'
+          error: 'patientName must not exceed 255 characters'
         });
       }
       
-      if (!hospitalId || !Number.isInteger(hospitalId)) {
+      // Validate chatLog
+      if (!chatLog || !Array.isArray(chatLog)) {
         return res.status(400).json({
           success: false,
-          error: 'Hospital ID is required and must be an integer'
+          error: 'chatLog is required and must be an array'
         });
       }
       
-      if (!priority || !Number.isInteger(priority) || priority < 1 || priority > 5) {
+      if (chatLog.length === 0) {
         return res.status(400).json({
           success: false,
-          error: 'Priority is required and must be an integer between 1 and 5'
+          error: 'chatLog must contain at least one message'
         });
       }
       
-      if (diagnosis && typeof diagnosis !== 'string') {
+      // Validate each chat message
+      for (let i = 0; i < chatLog.length; i++) {
+        const msg = chatLog[i];
+        if (!msg.sender || !msg.message || !msg.timestamp) {
+          return res.status(400).json({
+            success: false,
+            error: `chatLog[${i}] must have sender, message, and timestamp fields`
+          });
+        }
+        if (typeof msg.sender !== 'string' || typeof msg.message !== 'string' || typeof msg.timestamp !== 'string') {
+          return res.status(400).json({
+            success: false,
+            error: `chatLog[${i}] fields must be strings`
+          });
+        }
+      }
+      
+      // Validate triageSummary
+      if (!triageSummary || typeof triageSummary !== 'object' || Array.isArray(triageSummary)) {
         return res.status(400).json({
           success: false,
-          error: 'Diagnosis must be a string'
+          error: 'triageSummary is required and must be an object'
         });
       }
       
-      if (diagnosis && diagnosis.length > 500) {
-        return res.status(400).json({
-          success: false,
-          error: 'Diagnosis must not exceed 500 characters'
-        });
+      // Validate triageSummary fields (all optional but must be strings if present)
+      const validFields = [
+        'symptoms', 'chronology', 'quality', 'quantity', 'severity',
+        'positiveModifiers', 'negativeModifiers', 'associatedSymptoms',
+        'previousHistory', 'familyHistory', 'currentMedication', 'otherNotes'
+      ];
+      
+      for (const [key, value] of Object.entries(triageSummary)) {
+        if (!validFields.includes(key)) {
+          return res.status(400).json({
+            success: false,
+            error: `Invalid triageSummary field: ${key}`
+          });
+        }
+        if (value !== null && value !== undefined && typeof value !== 'string') {
+          return res.status(400).json({
+            success: false,
+            error: `triageSummary.${key} must be a string`
+          });
+        }
       }
       
-      // Create arrival
+      // Create arrival with new format
       const arrival = await arrivalService.createArrival({
-        patientName: patientName.trim(),
         hospitalId,
-        priority,
-        diagnosis: diagnosis ? diagnosis.trim() : null
+        patientName: patientName.trim(),
+        chatLog,
+        triageSummary
       });
       
       res.status(201).json({
