@@ -95,7 +95,7 @@ Keeps client independent from database implementation.
 
 ## Decision 16
 
-The nurse dashboard structure will be preserved (except removal of Inpatient beds occupancy).
+The nurse dashboard structure will be preserved.
 
 Reason:
 The existing UI already demonstrates core triage workflows including queue visualization, patient inspection, and priority reassignment.
