@@ -79,7 +79,7 @@ function PatientReview({ patient, onClose }) {
             <div className="review-section">
               <h3 className="section-title">Triage Summary</h3>
               
-              {patient.triageSummary.fields ? (
+              {Array.isArray(patient.triageSummary?.fields) && patient.triageSummary.fields.length > 0 ? (
                 // New dynamic format
                 patient.triageSummary.fields.map((field, index) => (
                   <div key={index} className="summary-item">
