@@ -15,11 +15,6 @@ function HospitalOccupancy({ occupancy }) {
     occupancy.erBeds.total
   );
 
-  const inpatientPercentage = calculatePercentage(
-    occupancy.inpatientRooms.occupied,
-    occupancy.inpatientRooms.total
-  );
-
   const getStatusColor = (percentage) => {
     if (percentage >= 90) return '#d32f2f';
     if (percentage >= 75) return '#f57c00';
@@ -59,34 +54,7 @@ function HospitalOccupancy({ occupancy }) {
         </div>
       </div>
 
-      <div className="occupancy-card">
-        <h3 className="occupancy-subtitle">Inpatient Rooms</h3>
-        <div className="occupancy-stats">
-          <div className="stat-row">
-            <span className="stat-label">Available:</span>
-            <span className="stat-value available">{occupancy.inpatientRooms.available}</span>
-          </div>
-          <div className="stat-row">
-            <span className="stat-label">Occupied:</span>
-            <span className="stat-value">{occupancy.inpatientRooms.occupied}</span>
-          </div>
-          <div className="stat-row">
-            <span className="stat-label">Total:</span>
-            <span className="stat-value">{occupancy.inpatientRooms.total}</span>
-          </div>
-        </div>
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{
-              width: `${inpatientPercentage}%`,
-              backgroundColor: getStatusColor(inpatientPercentage)
-            }}
-          >
-            <span className="progress-text">{inpatientPercentage}%</span>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 }

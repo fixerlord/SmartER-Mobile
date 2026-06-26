@@ -79,60 +79,73 @@ function PatientReview({ patient, onClose }) {
             <div className="review-section">
               <h3 className="section-title">Triage Summary</h3>
               
-              <div className="summary-item">
-                <strong>Symptoms:</strong>
-                <p>{patient.triageSummary.symptoms}</p>
-              </div>
+              {Array.isArray(patient.triageSummary?.fields) && patient.triageSummary.fields.length > 0 ? (
+                // New dynamic format
+                patient.triageSummary.fields.map((field, index) => (
+                  <div key={index} className="summary-item">
+                    <strong>{field.label}:</strong>
+                    <p>{field.value}</p>
+                  </div>
+                ))
+              ) : (
+                // Fallback to old hardcoded format for backward compatibility
+                <>
+                  <div className="summary-item">
+                    <strong>Symptoms:</strong>
+                    <p>{patient.triageSummary.symptoms}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Chronology of Illness:</strong>
-                <p>{patient.triageSummary.chronology}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Chronology of Illness:</strong>
+                    <p>{patient.triageSummary.chronology}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Quality of Illness:</strong>
-                <p>{patient.triageSummary.quality}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Quality of Illness:</strong>
+                    <p>{patient.triageSummary.quality}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Quantity:</strong>
-                <p>{patient.triageSummary.quantity}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Quantity:</strong>
+                    <p>{patient.triageSummary.quantity}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Positive Modifying Factors:</strong>
-                <p>{patient.triageSummary.positiveModifiers}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Positive Modifying Factors:</strong>
+                    <p>{patient.triageSummary.positiveModifiers}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Negative Modifying Factors:</strong>
-                <p>{patient.triageSummary.negativeModifiers}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Negative Modifying Factors:</strong>
+                    <p>{patient.triageSummary.negativeModifiers}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Associated Symptoms:</strong>
-                <p>{patient.triageSummary.associatedSymptoms}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Associated Symptoms:</strong>
+                    <p>{patient.triageSummary.associatedSymptoms}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Previous History:</strong>
-                <p>{patient.triageSummary.previousHistory}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Previous History:</strong>
+                    <p>{patient.triageSummary.previousHistory}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Family History:</strong>
-                <p>{patient.triageSummary.familyHistory}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Family History:</strong>
+                    <p>{patient.triageSummary.familyHistory}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Current Medication:</strong>
-                <p>{patient.triageSummary.currentMedication}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Current Medication:</strong>
+                    <p>{patient.triageSummary.currentMedication}</p>
+                  </div>
 
-              <div className="summary-item">
-                <strong>Other Notes:</strong>
-                <p>{patient.triageSummary.otherNotes}</p>
-              </div>
+                  <div className="summary-item">
+                    <strong>Other Notes:</strong>
+                    <p>{patient.triageSummary.otherNotes}</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

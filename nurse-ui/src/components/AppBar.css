@@ -29,25 +29,38 @@
   gap: 1.5rem;
 }
 
-.nurse-id {
-  font-size: 1rem;
+.hospital-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: #e0e0e0;
+  font-size: 1rem;
 }
 
-.logout-button {
-  background-color: #ff9800;
-  color: white;
+.hospital-dropdown {
+  background-color: #ffffff;
+  color: #1a3a52;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1rem;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  transition: background-color 0.3s;
+  min-width: 250px;
 }
 
-.logout-button:hover {
-  background-color: #f57c00;
+.hospital-dropdown:hover {
+  background-color: #f5f5f5;
+}
+
+.hospital-dropdown:focus {
+  outline: 2px solid #ff9800;
+  outline-offset: 2px;
+}
+
+.nurse-id {
+  font-size: 1rem;
+  color: #e0e0e0;
 }
 
 /* Tablet */
@@ -60,12 +73,17 @@
     font-size: 1.5rem;
   }
 
-  .nurse-id {
+  .hospital-selector {
     font-size: 0.9rem;
   }
 
-  .logout-button {
-    padding: 0.5rem 1rem;
+  .hospital-dropdown {
+    min-width: 200px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .nurse-id {
     font-size: 0.9rem;
   }
 }
@@ -90,14 +108,20 @@
 
   .app-bar-right {
     gap: 1rem;
+    flex-wrap: wrap;
   }
 
-  .nurse-id {
+  .hospital-selector {
     font-size: 0.85rem;
   }
 
-  .logout-button {
-    padding: 0.4rem 0.8rem;
+  .hospital-dropdown {
+    min-width: 180px;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .nurse-id {
     font-size: 0.85rem;
   }
 }
