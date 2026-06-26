@@ -63,6 +63,10 @@ const hospitalService = {
       
       const hospital = hospitalCheck.rows[0];
       
+      // Recalculate queue to ensure fresh ETA values
+      const queueService = require('./queueService');
+      await queueService.recalculateQueue(hospitalId);
+      
       // Get occupancy
       const occupancyQuery = `
         SELECT 

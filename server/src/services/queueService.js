@@ -11,7 +11,7 @@ const BASE_WAIT_TIMES = {
 
 const queueService = {
   /**
-   * Get queue for a specific hospital with calculated wait times
+   * Get queue for a specific hospital with calculated wait times and ETAs
    */
   async getHospitalQueue(hospitalId) {
     const client = await db.getClient();
@@ -47,7 +47,10 @@ const queueService = {
       const arrivalsResult = await client.query(arrivalsQuery, [hospitalId]);
       const arrivals = arrivalsResult.rows;
       
-      // Calculate estimated wait times
+      // Current time for ETA calculation
+      const now = new Date();
+      
+      // Calculate estimated wait times and ETAs
       const queueWithWaitTimes = arrivals.map((arrival, index) => {
         // Base wait time for this priority
         const baseWait = BASE_WAIT_TIMES[arrival.priority] || 0;
@@ -61,17 +64,21 @@ const queueService = {
         
         const estimatedWait = baseWait + additionalWait;
         
+        // Calculate ETA as current time + estimated wait
+        const eta = new Date(now.getTime() + estimatedWait * 60000); // Convert minutes to milliseconds
+        
         return {
           id: arrival.id,
-          estimatedWait: estimatedWait
+          estimatedWait: estimatedWait,
+          eta: eta
         };
       });
       
-      // Update estimated_wait in database
+      // Update estimated_wait AND eta in database
       for (const item of queueWithWaitTimes) {
         await client.query(
-          'UPDATE arrivals SET estimated_wait = $1 WHERE id = $2',
-          [item.estimatedWait, item.id]
+          'UPDATE arrivals SET estimated_wait = $1, eta = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',
+          [item.estimatedWait, item.eta, item.id]
         );
       }
       
@@ -83,7 +90,8 @@ const queueService = {
         patientName: arrival.patient_name,
         priority: arrival.priority,
         diagnosis: arrival.diagnosis,
-        estimatedWait: queueWithWaitTimes[index].estimatedWait
+        estimatedWait: queueWithWaitTimes[index].estimatedWait,
+        eta: queueWithWaitTimes[index].eta
       }));
       
     } catch (error) {
