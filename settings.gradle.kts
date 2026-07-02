@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "smartER"
 include(":app")
- 
+project(":app").projectDir = file("patient-ui/app")
