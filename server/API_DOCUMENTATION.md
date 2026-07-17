@@ -736,6 +736,134 @@ setHospitalOccupancy(result.data.occupancy);
 
 ---
 
+## Hospital Recommendations
+
+### GET /api/hospitals/recommendations
+Get hospitals sorted by total wait time (travel time + ER wait time) based on patient location.
+
+**This endpoint is the preferred method for mobile apps to fetch the list of hospitals**, as it provides personalized recommendations based on the patient's current location and chosen travel mode.
+
+**Query Parameters:**
+- `lat` (required) - Patient latitude (number, -90 to 90)
+- `lon` (required) - Patient longitude (number, -180 to 180)
+- `travelMode` (required) - Mode of travel: 'driving', 'walking', or 'cycling'
+
+**Example Request:**
+```
+GET /api/hospitals/recommendations?lat=49.2827&lon=-123.1207&travelMode=driving
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 2,
+      "name": "Royal Columbian Hospital",
+      "address": "330 E Columbia St, New Westminster, BC V3L 3W7",
+      "phone": "(604) 520-4253",
+      "latitude": 49.2069,
+      "longitude": -122.9106,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "estimatedWaitMinutes": 24,
+      "travelMinutes": 11,
+      "travelDistanceKm": 6.8,
+      "totalWaitMinutes": 35,
+      "travelDataAvailable": true
+    },
+    {
+      "id": 1,
+      "name": "Surrey Memorial Hospital",
+      "address": "13750 96 Ave, Surrey, BC V3V 1Z2",
+      "phone": "(604) 581-2211",
+      "latitude": 49.1764,
+      "longitude": -122.8427,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "estimatedWaitMinutes": 30,
+      "travelMinutes": 18,
+      "travelDistanceKm": 12.3,
+      "totalWaitMinutes": 48,
+      "travelDataAvailable": true
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- `id` - Hospital ID
+- `name` - Hospital name
+- `address` - Full address
+- `phone` - Contact phone number
+- `latitude` - Hospital latitude
+- `longitude` - Hospital longitude
+- `created_at` - Record creation timestamp
+- `estimatedWaitMinutes` - Current estimated ER wait time at the hospital
+- `travelMinutes` - Calculated travel time from patient location to hospital
+- `travelDistanceKm` - Travel distance in kilometers
+- `totalWaitMinutes` - Sum of estimatedWaitMinutes + travelMinutes (used for sorting)
+- `travelDataAvailable` - Boolean indicating if travel data was successfully calculated
+
+**Response (400 Bad Request):**
+```json
+{
+  "success": false,
+  "error": "Missing required parameters: lat, lon, and travelMode are required"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Invalid latitude: must be a number between -90 and 90"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Invalid longitude: must be a number between -180 and 180"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Invalid travelMode: must be one of driving, walking, cycling"
+}
+```
+
+**Sorting Logic:**
+- Hospitals are sorted by `totalWaitMinutes` in ascending order (shortest total wait first)
+- If travel data cannot be calculated for a hospital, it will have `travelDataAvailable: false` and `travelMinutes`, `travelDistanceKm`, and `totalWaitMinutes` will be `null`
+- Hospitals with unavailable travel data are sorted to the end of the list
+
+**Travel Time Calculation:**
+- Uses the TravelTimeProvider abstraction (currently OSRM)
+- Supports three travel modes: driving, walking, cycling
+- If travel time calculation fails for a specific hospital, the request continues processing other hospitals
+- The endpoint only returns a 500 error if the overall request cannot be completed
+
+**Wait Time Calculation:**
+- `estimatedWaitMinutes` is calculated as the average `estimated_wait` of all active arrivals (status: 'waiting' or 'in_treatment') at each hospital
+- If no active arrivals exist, defaults to 30 minutes
+- `totalWaitMinutes = estimatedWaitMinutes + travelMinutes`
+
+**Mobile App Integration:**
+- Use this endpoint instead of `/api/hospitals` to get location-aware hospital recommendations
+- Request user's location permission to get accurate lat/lon coordinates
+- Allow users to select their travel mode (driving/walking/cycling)
+- Display hospitals sorted by total wait time
+- Show both travel time and ER wait time separately for transparency
+- Handle hospitals with `travelDataAvailable: false` gracefully (e.g., show "Travel data unavailable")
+
+**Example cURL:**
+```bash
+curl "http://localhost:5000/api/hospitals/recommendations?lat=49.2827&lon=-123.1207&travelMode=driving"
+```
+
+---
+
 ## Future Endpoints (Not Yet Implemented)
 
 The following endpoints return `501 Not Implemented`:
