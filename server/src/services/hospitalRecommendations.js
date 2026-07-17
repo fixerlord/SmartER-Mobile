@@ -66,7 +66,10 @@ async function getHospitalRecommendations(patientLat, patientLon, travelMode) {
         };
       } catch (error) {
         // If travel time calculation fails for this hospital, include it with null travel data
-        console.error(`Failed to calculate travel time for hospital ${hospital.id}:`, error.message);
+        console.error(`Failed to calculate travel time for hospital ${hospital.id} (${hospital.name}):`, error.message);
+        console.error('Hospital coordinates:', { lat: hospital.latitude, lon: hospital.longitude });
+        console.error('Patient coordinates:', { lat: patientLat, lon: patientLon });
+        console.error('Travel mode:', travelMode);
         
         const estimatedWaitMinutes = Math.round(parseFloat(hospital.estimated_wait_minutes));
         
