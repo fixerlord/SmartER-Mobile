@@ -47,6 +47,14 @@ async function getHospitalRecommendations(patientLat, patientLon, travelMode) {
           throw new Error(`Invalid hospital coordinates: lat=${hospital.latitude}, lon=${hospital.longitude}`);
         }
         
+        console.log(`Calculating travel time for hospital ${hospital.id}:`, {
+          patientLat,
+          patientLon,
+          hospitalLat,
+          hospitalLon,
+          travelMode
+        });
+        
         const travelData = await provider.getTravelTime(
           patientLat,
           patientLon,
@@ -54,6 +62,8 @@ async function getHospitalRecommendations(patientLat, patientLon, travelMode) {
           hospitalLon,
           travelMode
         );
+        
+        console.log(`Travel time calculated successfully for hospital ${hospital.id}:`, travelData);
 
         const estimatedWaitMinutes = Math.round(parseFloat(hospital.estimated_wait_minutes));
         const travelMinutes = travelData.durationMinutes;
