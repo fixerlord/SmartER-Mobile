@@ -38,11 +38,20 @@ async function getHospitalRecommendations(patientLat, patientLon, travelMode) {
   const hospitalsWithTravelData = await Promise.all(
     hospitals.map(async (hospital) => {
       try {
+        // Ensure coordinates are numbers (PostgreSQL may return them as strings)
+        const hospitalLat = Number(hospital.latitude);
+        const hospitalLon = Number(hospital.longitude);
+        
+        // Validate conversion succeeded
+        if (isNaN(hospitalLat) || isNaN(hospitalLon)) {
+          throw new Error(`Invalid hospital coordinates: lat=${hospital.latitude}, lon=${hospital.longitude}`);
+        }
+        
         const travelData = await provider.getTravelTime(
           patientLat,
           patientLon,
-          hospital.latitude,
-          hospital.longitude,
+          hospitalLat,
+          hospitalLon,
           travelMode
         );
 
@@ -55,8 +64,8 @@ async function getHospitalRecommendations(patientLat, patientLon, travelMode) {
           name: hospital.name,
           address: hospital.address,
           phone: hospital.phone,
-          latitude: parseFloat(hospital.latitude),
-          longitude: parseFloat(hospital.longitude),
+          latitude: hospitalLat,
+          longitude: hospitalLon,
           created_at: hospital.created_at,
           estimatedWaitMinutes: estimatedWaitMinutes,
           travelMinutes: travelMinutes,
