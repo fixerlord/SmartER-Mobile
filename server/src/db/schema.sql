@@ -1,8 +1,22 @@
 -- SmartER Database Schema
 -- Drop existing tables if they exist
+DROP TABLE IF EXISTS chat_messages CASCADE;
+DROP TABLE IF EXISTS triage_summary CASCADE;
+DROP TABLE IF EXISTS hospital_occupancy CASCADE;
 DROP TABLE IF EXISTS arrivals CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS patients CASCADE;
 DROP TABLE IF EXISTS hospitals CASCADE;
+
+-- Users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255),
+    phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Hospitals table
 CREATE TABLE hospitals (
@@ -33,6 +47,7 @@ CREATE TABLE patients (
 -- Arrivals table
 CREATE TABLE arrivals (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     patient_name VARCHAR(255) NOT NULL,
     hospital_id INTEGER NOT NULL REFERENCES hospitals(id) ON DELETE CASCADE,
     priority INTEGER NOT NULL CHECK (priority >= 1 AND priority <= 5),
@@ -70,7 +85,7 @@ CREATE TABLE triage_summary (
 CREATE TABLE chat_messages (
     id SERIAL PRIMARY KEY,
     arrival_id INTEGER NOT NULL REFERENCES arrivals(id) ON DELETE CASCADE,
-    sender VARCHAR(20) NOT NULL CHECK (sender IN ('bot', 'patient')),
+    sender VARCHAR(20) NOT NULL CHECK (sender IN ('bot', 'patient', 'assistant')),
     message TEXT NOT NULL,
     timestamp VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

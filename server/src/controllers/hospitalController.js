@@ -1,6 +1,45 @@
 const hospitalService = require('../services/hospitalService');
+const { getHospitalRecommendations } = require('../services/hospitalRecommendations');
 
 const hospitalController = {
+  /**
+   * GET /api/hospitals/recommendations
+   * Get hospitals sorted by total wait time based on location
+   */
+  async getRecommendations(req, res, next) {
+    try {
+      const { lat, lon, travelMode } = req.query;
+
+      // Validate required parameters
+      if (!lat || !lon || !travelMode) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required parameters: lat, lon, and travelMode are required'
+        });
+      }
+
+      const latitude = parseFloat(lat);
+      const longitude = parseFloat(lon);
+
+      if (isNaN(latitude) || isNaN(longitude)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid coordinates'
+        });
+      }
+
+      // Get recommendations from service
+      const recommendations = await getHospitalRecommendations(latitude, longitude, travelMode);
+
+      res.status(200).json({
+        success: true,
+        data: recommendations
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   /**
    * GET /api/hospitals
    * Get all hospitals
@@ -25,7 +64,15 @@ const hospitalController = {
   async getHospitalById(req, res, next) {
     try {
       const { id } = req.params;
-      const hospital = await hospitalService.getHospitalById(id);
+
+      if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid hospital ID'
+        });
+      }
+
+      const hospital = await hospitalService.getHospitalById(parseInt(id));
       
       if (!hospital) {
         return res.status(404).json({

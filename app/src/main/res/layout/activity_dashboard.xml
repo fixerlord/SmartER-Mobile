@@ -121,15 +121,17 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvQueuePosition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="#18"
+                        android:text="--"
                         android:textColor="@color/dashBlue"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvQueueUpdateNote"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Updated now"
@@ -155,18 +157,20 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvHeartRate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="72 bpm"
+                        android:text="-- bpm"
                         android:textColor="@color/dashTeal"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvVitalsStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Normal range"
+                        android:text="Live feed"
                         android:textColor="@color/dashMuted"
                         android:textSize="11sp" />
                 </LinearLayout>
@@ -233,6 +237,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvHospitalAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

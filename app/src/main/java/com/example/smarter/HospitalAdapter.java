@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smarter.models.Hospital;
 
 import java.util.List;
+import java.util.Locale;
 
 public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
 
@@ -37,12 +38,20 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Hospital hospital = hospitals.get(position);
         holder.tvName.setText(hospital.getName());
+        holder.tvAddress.setText(hospital.getAddress());
+        
+        StringBuilder info = new StringBuilder();
         int waitTime = hospital.getErWaitTime();
-        if (waitTime == 0) {
-            // Fallback for demo if wait time is not in DB yet
-            waitTime = 15 + (hospital.getId() * 7); 
+        info.append("ER Wait: ").append(waitTime).append(" mins");
+
+        if (hospital.isTravelDataAvailable()) {
+            info.append(" • ").append(hospital.getTravelMinutes()).append(" min drive");
+            if (hospital.getTravelDistanceKm() != null) {
+                info.append(" (").append(String.format(Locale.getDefault(), "%.1f", hospital.getTravelDistanceKm())).append(" km)");
+            }
         }
-        holder.tvWaitTime.setText("Wait time: " + waitTime + " mins");
+        
+        holder.tvWaitTime.setText(info.toString());
         holder.itemView.setOnClickListener(v -> listener.onHospitalClick(hospital));
     }
 
@@ -52,11 +61,12 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvWaitTime;
+        TextView tvName, tvAddress, tvWaitTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvHospitalName);
+            tvAddress = itemView.findViewById(R.id.tvHospitalAddress);
             tvWaitTime = itemView.findViewById(R.id.tvWaitTime);
         }
     }

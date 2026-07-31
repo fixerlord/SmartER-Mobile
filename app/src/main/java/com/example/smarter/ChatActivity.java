@@ -2,6 +2,7 @@ package com.example.smarter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -109,7 +110,15 @@ public class ChatActivity extends AppCompatActivity {
         
         TriageSummary summary = new TriageSummary(fields);
 
-        ArrivalRequest request = new ArrivalRequest(hospitalId, "John Doe", chatMessages, summary);
+        String patientName = TokenManager.getInstance(this).getUserName();
+        int userId = TokenManager.getInstance(this).getUserId();
+        
+        if (userId == -1) {
+            Log.e("ChatActivity", "UserId is -1. User may need to re-login.");
+            // Fallback or handle error
+        }
+
+        ArrivalRequest request = new ArrivalRequest(hospitalId, userId, patientName, chatMessages, summary);
 
         ApiService service = ApiClient.getClient(this).create(ApiService.class);
         service.createArrival(request).enqueue(new Callback<BaseResponse<ArrivalResponse>>() {

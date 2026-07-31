@@ -38,6 +38,7 @@
         <activity android:name=".ChatActivity" />
         <activity android:name=".HospitalActivity" />
         <activity android:name=".StatusActivity" />
+        <activity android:name=".RecordsActivity" />
 
     </application>
 

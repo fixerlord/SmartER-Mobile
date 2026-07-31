@@ -54,6 +54,12 @@ INSERT INTO hospitals (name, address, phone, latitude, longitude) VALUES
 ('Bella Coola General Hospital', '1025 Elcho St, Bella Coola, BC V0T 1C0', '(604) 875-4111', 52.3725, -126.7530),
 ('Nicola Valley Hospital', '3451 Voght St, Merritt, BC V1K 1C6', '(604) 875-4111', 50.1147, -120.7895);
 
+-- Insert sample users
+INSERT INTO users (username, password, full_name, phone) VALUES
+('user', 'user123', 'John Doe', '604-555-0101'),
+('israel1', '123Fixer5lord', 'Israel', '6067899375'),
+('admin', 'admin123', 'Administrator', '604-555-0000');
+
 -- Insert hospital occupancy
 -- NOTE: Capacity is randomly generated and does not reflect actual values of the respective hospitals
 INSERT INTO hospital_occupancy (hospital_id, current_er_capacity, max_er_capacity, current_inpatient_capacity, max_inpatient_capacity) VALUES
@@ -104,12 +110,12 @@ INSERT INTO patients (patient_id, name, age, gender, phone, email) VALUES
 ('PAT-003', 'Bob Johnson', 58, 'Male', '604-555-0103', 'bob.johnson@email.com');
 
 -- Insert sample arrivals
-INSERT INTO arrivals (patient_name, hospital_id, priority, diagnosis, suspected_diagnosis, status, eta, arrived_at) VALUES
-('John Smith', 1, 2, 'Chest pain', 'Cardiac Arrest', 'waiting', NOW() + INTERVAL '15 minutes', NOW() - INTERVAL '30 minutes'),
-('Jane Doe', 1, 4, 'Minor laceration', 'Minor Laceration', 'in_treatment', NOW() + INTERVAL '30 minutes', NOW() - INTERVAL '1 hour'),
-('Bob Johnson', 2, 1, 'Severe trauma', 'Severe Trauma', 'in_treatment', NOW() + INTERVAL '5 minutes', NOW() - INTERVAL '15 minutes'),
-('Alice Williams', 1, 3, 'Abdominal pain', 'Acute Appendicitis', 'waiting', NOW() + INTERVAL '20 minutes', NOW() - INTERVAL '45 minutes'),
-('Charlie Brown', 3, 5, 'Cold symptoms', 'Common Cold', 'waiting', NOW() + INTERVAL '45 minutes', NOW() - INTERVAL '2 hours');
+INSERT INTO arrivals (user_id, patient_name, hospital_id, priority, diagnosis, suspected_diagnosis, status, eta, arrived_at) VALUES
+(1, 'John Smith', 1, 2, 'Chest pain', 'Cardiac Arrest', 'waiting', NOW() + INTERVAL '15 minutes', NOW() - INTERVAL '30 minutes'),
+(2, 'Jane Doe', 1, 4, 'Minor laceration', 'Minor Laceration', 'in_treatment', NOW() + INTERVAL '30 minutes', NOW() - INTERVAL '1 hour'),
+(2, 'Bob Johnson', 2, 1, 'Severe trauma', 'Severe Trauma', 'in_treatment', NOW() + INTERVAL '5 minutes', NOW() - INTERVAL '15 minutes'),
+(1, 'Alice Williams', 1, 3, 'Abdominal pain', 'Acute Appendicitis', 'waiting', NOW() + INTERVAL '20 minutes', NOW() - INTERVAL '45 minutes'),
+(1, 'Charlie Brown', 3, 5, 'Cold symptoms', 'Common Cold', 'waiting', NOW() + INTERVAL '45 minutes', NOW() - INTERVAL '2 hours');
 
 -- Insert sample triage summaries
 INSERT INTO triage_summary (arrival_id, symptoms, chronology, quality, quantity, positive_modifiers, negative_modifiers, associated_symptoms, previous_history, family_history, current_medication, other_notes) VALUES

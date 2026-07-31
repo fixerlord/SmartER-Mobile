@@ -68,7 +68,17 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<BaseResponse<AuthResponse>> call, Response<BaseResponse<AuthResponse>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     AuthResponse auth = response.body().getData();
-                    TokenManager.getInstance(RegisterActivity.this).saveToken(auth.getToken());
+                    TokenManager tokenManager = TokenManager.getInstance(RegisterActivity.this);
+                    tokenManager.saveToken(auth.getToken());
+                    
+                    if (auth.getUser() != null) {
+                        String displayName = auth.getUser().getFullName();
+                        if (displayName == null || displayName.isEmpty()) {
+                            displayName = auth.getUser().getUsername();
+                        }
+                        tokenManager.saveUserName(displayName);
+                        tokenManager.saveUserId(auth.getUser().getId());
+                    }
                     
                     Toast.makeText(RegisterActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                     

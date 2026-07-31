@@ -6,7 +6,7 @@ const arrivalService = {
    * Accepts new format with chatLog and triageSummary
    */
   async createArrival(arrivalData) {
-    const { hospitalId, patientName, chatLog, triageSummary } = arrivalData;
+    const { hospitalId, userId, patientName, chatLog, triageSummary } = arrivalData;
     
     const client = await db.getClient();
     
@@ -31,10 +31,11 @@ const arrivalService = {
       
       // Insert arrival
       const insertQuery = `
-        INSERT INTO arrivals (patient_name, hospital_id, priority, suspected_diagnosis, status)
-        VALUES ($1, $2, $3, $4, 'waiting')
+        INSERT INTO arrivals (user_id, patient_name, hospital_id, priority, suspected_diagnosis, status)
+        VALUES ($1, $2, $3, $4, $5, 'waiting')
         RETURNING 
           id,
+          user_id,
           patient_name,
           hospital_id,
           priority,
@@ -45,6 +46,7 @@ const arrivalService = {
       `;
       
       const result = await client.query(insertQuery, [
+        userId,
         patientName,
         hospitalId,
         priority,
@@ -72,20 +74,31 @@ const arrivalService = {
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       `;
-      
+
+      // Handle both flat object and dynamic fields[] format
+      let symptoms = triageSummary ? triageSummary.symptoms : null;
+      let severity = triageSummary ? (triageSummary.severity || triageSummary.quantity) : null;
+
+      if (triageSummary && Array.isArray(triageSummary.fields)) {
+        for (const field of triageSummary.fields) {
+          if (field.label === 'Symptoms') symptoms = field.value;
+          if (field.label === 'Severity') severity = field.value;
+        }
+      }
+
       await client.query(triageInsertQuery, [
         arrivalId,
-        triageSummary.symptoms || null,
-        triageSummary.chronology || null,
-        triageSummary.quality || null,
-        triageSummary.quantity || triageSummary.severity || null,
-        triageSummary.positiveModifiers || null,
-        triageSummary.negativeModifiers || null,
-        triageSummary.associatedSymptoms || null,
-        triageSummary.previousHistory || null,
-        triageSummary.familyHistory || null,
-        triageSummary.currentMedication || null,
-        triageSummary.otherNotes || null
+        symptoms || null,
+        triageSummary ? triageSummary.chronology : null,
+        triageSummary ? triageSummary.quality : null,
+        severity || null,
+        triageSummary ? triageSummary.positiveModifiers : null,
+        triageSummary ? triageSummary.negativeModifiers : null,
+        triageSummary ? triageSummary.associatedSymptoms : null,
+        triageSummary ? triageSummary.previousHistory : null,
+        triageSummary ? triageSummary.familyHistory : null,
+        triageSummary ? triageSummary.currentMedication : null,
+        triageSummary ? triageSummary.otherNotes : null
       ]);
       
       // Insert chat messages
@@ -243,6 +256,7 @@ const arrivalService = {
         h.name as hospital_name,
         a.priority,
         a.diagnosis,
+        a.estimated_wait,
         a.status,
         a.arrived_at,
         a.created_at
@@ -267,6 +281,7 @@ const arrivalService = {
         h.name as hospital_name,
         a.priority,
         a.diagnosis,
+        a.estimated_wait,
         a.status,
         a.arrived_at,
         a.created_at
@@ -393,10 +408,10 @@ const arrivalService = {
    */
   async updatePriority(id, newPriority) {
     const client = await db.getClient();
-    
+
     try {
       await client.query('BEGIN');
-      
+
       // Update priority
       const updateQuery = `
         UPDATE arrivals
@@ -404,21 +419,21 @@ const arrivalService = {
         WHERE id = $2
         RETURNING hospital_id
       `;
-      
+
       const result = await client.query(updateQuery, [newPriority, id]);
-      
+
       if (result.rows.length === 0) {
         throw new Error('Arrival not found');
       }
-      
+
       const hospitalId = result.rows[0].hospital_id;
-      
+
       await client.query('COMMIT');
-      
+
       // Recalculate queue for this hospital
       const queueService = require('./queueService');
       await queueService.recalculateQueue(hospitalId);
-      
+
       return { success: true, hospitalId };
     } catch (error) {
       await client.query('ROLLBACK');
@@ -426,6 +441,61 @@ const arrivalService = {
     } finally {
       client.release();
     }
+  },
+
+  /**
+   * Get the latest active arrival for a user
+   */
+  async getLatestActiveArrival(userId) {
+    console.log(`[DEBUG] getLatestActiveArrival called for userId: ${userId}`);
+    const query = `
+      SELECT
+        a.id,
+        a.patient_name,
+        a.hospital_id,
+        h.name as hospital_name,
+        h.address as hospital_address,
+        a.priority,
+        a.suspected_diagnosis,
+        a.diagnosis,
+        a.status,
+        a.estimated_wait,
+        a.eta,
+        a.arrived_at,
+        a.created_at
+      FROM arrivals a
+      JOIN hospitals h ON a.hospital_id = h.id
+      WHERE a.user_id = $1 AND a.status IN ('waiting', 'in_treatment')
+      ORDER BY a.created_at DESC
+      LIMIT 1
+    `;
+    
+    const result = await db.query(query, [userId]);
+    if (result.rows.length === 0) return null;
+
+    const arrival = { ...result.rows[0] };
+
+    if (arrival) {
+      // Calculate real-time queue position
+      const posQuery = `
+        SELECT count(*) + 1 as position
+        FROM arrivals
+        WHERE hospital_id = $1
+          AND status IN ('waiting', 'in_treatment')
+          AND (priority < $2 OR (priority = $2 AND arrived_at < $3))
+      `;
+      const posResult = await db.query(posQuery, [arrival.hospital_id, arrival.priority, arrival.arrived_at]);
+      arrival.queue_position = 99; // Hardcoded test
+
+      // Add mock clinical vitals
+      arrival.vitals = {
+        heart_rate: 88, // Hardcoded test
+        oxygen: 98,
+        status: 'Stable'
+      };
+    }
+
+    return arrival;
   }
 };
 

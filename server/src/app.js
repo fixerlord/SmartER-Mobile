@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log(`[DEBUG] ${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
   next();
 });
 
@@ -43,6 +43,7 @@ app.get('/api/test-db', async (req, res, next) => {
 });
 
 // API routes
+app.get('/api/ping', (req, res) => res.json({ pong: true, time: new Date() }));
 app.use('/api', routes);
 
 // 404 handler

@@ -81,80 +81,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/brandRow" />
 
-        <TextView
-            android:id="@+id/tvHeroBody"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="3dp"
-            android:text="Access live triage, secure patient context, and real-time care updates from one focused workspace."
-            android:textColor="@color/loginMuted"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvHeroTitle" />
-
-        <LinearLayout
-            android:id="@+id/statStrip"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvHeroBody">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="88dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_login_stat"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Live queue"
-                    android:textColor="@color/loginMuted"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="12 min"
-                    android:textColor="@color/loginBlueDark"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="88dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_login_stat"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Coverage"
-                    android:textColor="@color/loginMuted"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="24/7"
-                    android:textColor="@color/loginAqua"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/loginPanel"
@@ -166,7 +92,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/statStrip">
+            app:layout_constraintTop_toBottomOf="@id/tvHeroTitle">
 
             <TextView
                 android:layout_width="match_parent"
@@ -238,50 +164,6 @@
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_login_trust_chip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_login_shield" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:text="Encrypted session"
-                        android:textColor="#0F8F64"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvForgotPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="10dp"
-                    android:gravity="center"
-                    android:paddingStart="6dp"
-                    android:paddingEnd="2dp"
-                    android:text="Forgot?"
-                    android:textColor="@color/loginBlue"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
@@ -297,11 +179,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:backgroundTint="@null"
-                app:cornerRadius="18dp"
-                app:icon="@drawable/ic_login_arrow"
-                app:iconGravity="textEnd"
-                app:iconPadding="10dp"
-                app:iconTint="@color/white" />
+                app:cornerRadius="18dp" />
 
             <TextView
                 android:id="@+id/tvRegister"
@@ -315,19 +193,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvFooter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
-            android:text="HIPAA-ready workflow design for modern emergency teams"
-            android:textColor="@color/loginMuted"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginPanel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const hospitalsRouter = require('./hospitals');
 const arrivalsRouter = require('./arrivals');
+const authRouter = require('./auth');
 const patientsRouter = require('./patients');
 const triageRouter = require('./triage');
 const queueRouter = require('./queue');
@@ -10,6 +11,7 @@ const chatRouter = require('./chat');
 const occupancyRouter = require('./occupancy');
 const recordsRouter = require('./records');
 
+router.use('/auth', authRouter);
 router.use('/hospitals', hospitalsRouter);
 router.use('/arrivals', arrivalsRouter);
 router.use('/patients', patientsRouter);

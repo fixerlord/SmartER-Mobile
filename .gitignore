@@ -1,2 +1,37 @@
+# Android
+.gradle/
+build/
+app/build/
+local.properties
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/modules/
+.idea/deploymentTargetSelector.xml
+*.iml
+*.class
+.DS_Store
+
+# Node.js
+node_modules/
+server/node_modules/
+nurse-ui/node_modules/
+.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Other
 .aider*
 CLAUDE.md
+db_debug.txt
+server/db_fallback_check.txt
+server/db_final_check.txt
+server/db_final_init.txt
+server/db_init_output.txt

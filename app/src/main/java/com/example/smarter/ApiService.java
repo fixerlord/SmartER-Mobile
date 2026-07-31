@@ -26,9 +26,22 @@ public interface ApiService {
     @GET("api/hospitals")
     Call<BaseResponse<List<Hospital>>> getHospitals();
 
+    @GET("api/hospitals/nearby")
+    Call<BaseResponse<List<Hospital>>> getRecommendations(
+            @retrofit2.http.Query("lat") double lat,
+            @retrofit2.http.Query("lon") double lon,
+            @retrofit2.http.Query("travelMode") String travelMode
+    );
+
     @POST("api/arrivals")
     Call<BaseResponse<ArrivalResponse>> createArrival(@Body ArrivalRequest request);
 
     @GET("api/arrivals/{id}")
     Call<BaseResponse<ArrivalResponse>> getArrivalStatus(@Path("id") int id);
+
+    @GET("api/arrivals/latest")
+    Call<BaseResponse<ArrivalResponse>> getLatestArrival(@retrofit2.http.Query("userId") int userId);
+
+    @GET("api/records")
+    Call<BaseResponse<List<ArrivalResponse>>> getUserRecords(@retrofit2.http.Query("userId") int userId);
 }

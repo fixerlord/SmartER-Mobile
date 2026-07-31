@@ -12,6 +12,8 @@ import java.security.GeneralSecurityException;
 public class TokenManager {
     private static final String PREF_NAME = "secure_prefs";
     private static final String KEY_TOKEN = "jwt_token";
+    private static final String KEY_USER_NAME = "user_name";
+    private static final String KEY_USER_ID = "user_id";
     private static TokenManager instance;
     private SharedPreferences sharedPreferences;
 
@@ -50,7 +52,23 @@ public class TokenManager {
         return sharedPreferences.getString(KEY_TOKEN, null);
     }
 
+    public void saveUserName(String name) {
+        sharedPreferences.edit().putString(KEY_USER_NAME, name).apply();
+    }
+
+    public String getUserName() {
+        return sharedPreferences.getString(KEY_USER_NAME, "User");
+    }
+
+    public void saveUserId(int userId) {
+        sharedPreferences.edit().putInt(KEY_USER_ID, userId).apply();
+    }
+
+    public int getUserId() {
+        return sharedPreferences.getInt(KEY_USER_ID, -1);
+    }
+
     public void clearToken() {
-        sharedPreferences.edit().remove(KEY_TOKEN).apply();
+        sharedPreferences.edit().remove(KEY_TOKEN).remove(KEY_USER_NAME).remove(KEY_USER_ID).apply();
     }
 }

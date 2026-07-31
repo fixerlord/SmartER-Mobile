@@ -7,3 +7,4 @@ app.listen(PORT, () => {
   console.log(`SmartER Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+// Fixed routes and services
