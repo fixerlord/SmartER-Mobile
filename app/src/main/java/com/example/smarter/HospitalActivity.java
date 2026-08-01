@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -86,9 +87,17 @@ public class HospitalActivity extends AppCompatActivity {
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+        fusedLocationClient.getCurrentLocation(com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(this, location -> {
+            if (location != null) {
+                Log.d("HospitalActivity", "Current Location: Lat=" + location.getLatitude() + ", Lon=" + location.getLongitude());
+                System.out.println("Current Location: Lat=" + location.getLatitude() + ", Lon=" + location.getLongitude());
+            } else {
+                Log.d("HospitalActivity", "Current Location: null");
+                System.out.println("Current Location: null");
+            }
             fetchHospitals(location);
         }).addOnFailureListener(e -> {
+            Log.e("HospitalActivity", "Error getting location", e);
             fetchHospitals(null);
         });
     }
